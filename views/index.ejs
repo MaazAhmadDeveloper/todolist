@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carter+One&family=Caveat&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <title>Todo List</title>
+</head>
+
+<body>
+
+    <% const timeElapsed=Date.now(); %>
+        <% const today=new Date(timeElapsed); %>
+            <% const daysOfWeek=["Sun", "Mon" , "Tue" , "Wed" , "Thu" , "Fri" , "Sat" ]; %>
+                <% const dayName=daysOfWeek[new Date().getDay()]; %>
+                    <% const time=(today.getHours()> 9 ? today.getHours() : "0"+today.getHours()) + " : " +
+                        (today.getMinutes() > 9 ? today.getMinutes() : "0"+today.getMinutes()) ; %>
+
+
+                        <!-- Navigation-bar -->
+                        <!-- <header>
+        <div class="container mt-4 navbar">
+            <div class="row">
+                <div class="col top"><i class="fa-solid fa-calendar-days icon"></i> <a href="/" class="today-text">Home</a></div>
+            </div>
+        
+    </header> -->
+
+
+                        <!-- Main -->
+                        <main>
+
+                            <!-- ARTICLE -->
+
+
+                            <% if (locals.listTitle) { %>
+
+
+                                <article class="article float-lg-left">
+
+                                    <h2 class="menu-icon" onclick="menuClick()"><i class="bi bi-list"></i> </h2>
+                                    <ul class="list" id="main-list">
+                                        <div class="list-items-contsiner">
+                                            <% mainArray.forEach((arrayObject)=>{ %>
+
+                                                <div class="list-item-line">
+                                                    <input type="button" name="listTitle" class="list-item"
+                                                        value="<%= arrayObject.name%> "
+                                                        onclick="window.location.href='/<%= encodeURIComponent(arrayObject.name) %>' ">
+                                                    <i class="extraa">
+                                                        <form action="/deleteOneList" method="post" class="del-form del-for-max-width">
+                                                            <input type="hidden" name="listName"
+                                                                value="<%= arrayObject.name %>">
+                                                            <button type="submit" class="del ">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </i>
+                                                </div>
+
+                                                <% }) %>
+
+                                                    <!-- delete all form -->
+                                                    <% if(mainArray.length !==1){ %>
+                                                        <form action="/d/eleteAll" method="post">
+                                                            <button type="submit" class="deleteAll" name="deleteAll"
+                                                                value="delete"> <i class="i-delete-all">Delete All</i>
+                                                                <i class="i-all">All</i> <i
+                                                                    class="bi bi-trash"></i></button>
+                                                        </form>
+                                                        <% } %>
+                                        </div>
+
+                                    </ul>
+
+
+                                    <!-- Create Form -->
+                                    <form action="/create" method="post" onclick="createList()" id="top-create-input"
+                                        class="create-form-add-icon create-form-small create-form">
+
+                                        <input type="text" class="create-input" name="newList" placeholder="New List">
+                                        <input type="hidden" name="date" value="<%= dayName %>">
+                                        <input type="hidden" name="time" value="<%= time %>">
+
+                                        <button type="submit" class="create-button">+</button>
+                                    </form>
+
+                                </article>
+                                <% } %>
+
+                                    <!-- Main List  -->
+
+                                    <div class="main-box">
+
+                                        <div class="heading">
+
+                                            <h1 class="main-list-heading">
+                                                <%= listTitle %>
+                                                <p class="main-list-date">
+                                                    <%= publishDate +" "+ publishTime%> </p>
+                                                    <form action="/deleteOneList" method="post" class="del-form del-for-min-width">
+                                                        <input type="hidden" name="listName"
+                                                            value="<%= listTitle %>">
+                                                        <button type="submit" class="del ">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+
+        </h1>
+
+        </div>
+
+        <div class=" form-box">
+
+
+                                                            <% array.forEach((arrayElement, index)=>{ %>
+
+                                                                <% if (index !==0) { %>
+
+                                                                    <form class="parrent" action="/delete"
+                                                                        method="post">
+
+                                                                        <input type="checkbox" class="checkbox">
+                                                                        <p class="next-note">
+                                                                            <%= arrayElement.name %>
+                                                                        </p>
+                                                                        <input type="hidden" name="listTitle"
+                                                                            value="<%= listTitle %>">
+                                                                        <button class="delete" name="delete"
+                                                                            value="<%= arrayElement._id %>"
+                                                                            type="submit"><i
+                                                                                class="bi bi-trash"></i></button>
+
+                                                                    </form>
+                                                                    <%} %>
+                                                                        <% }) %>
+
+
+                                        </div>
+                                        <!--add listitem form  -->
+                                        <form action="/" method="post"
+                                            class="add-form-add-icon add-form-small form-of-input"
+                                            onclick="addNewListItem()" id="add-create-input">
+
+                                            <input type="text" name="new_note" placeholder="New item"
+                                                class="new-item-placeholder">
+
+                                            <input type="hidden" name="listTitle" value="<%= listTitle %>">
+                                            <button type="submit" class="add-button">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+
+                                        </form>
+                                    </div>
+                        </main>
+
+                        <!-- Footer -->
+                        <footer class="footer-parrent">
+
+                            <%const year=new Date().getFullYear(); %>
+
+                                <p class="footer"> Copyright &#169; <%= year %>
+                                </p>
+
+                                </div>
+                        </footer>
+                        </div>
+
+                        <script>
+
+                            var menuFlag = true;
+
+                            const menuClick = () => {
+                                menuFlag = !menuFlag; // Toggle the menuFlag value
+
+                                if (menuFlag) {
+                                    document.getElementById("main-list").style.width = "230px";
+                                    document.querySelector(".list-items-contsiner").style.opacity = 1;
+                                    document.querySelector(".create-form").style.opacity = 1;
+                                } else {
+                                    document.getElementById("main-list").style.width = "50px";
+                                    document.querySelector(".list-items-contsiner").style.opacity = 0;
+                                    document.querySelector(".create-form").style.opacity = 0;
+                                }
+                            }
+
+                            const createList = () => {
+                                document.getElementById("top-create-input").classList.remove("create-form-add-icon");
+                                document.getElementById("top-create-input").classList.add("create-form-large");
+                            }
+
+
+                            const addNewListItem = () => {
+                                document.getElementById("add-create-input").classList.remove("add-form-add-icon");
+                                document.getElementById("add-create-input").classList.add("add-form-large");
+                            }
+                        </script>
+
+</body>
+
+</html>
