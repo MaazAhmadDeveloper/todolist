@@ -29,7 +29,7 @@ app.get("/" , async(req , res)=>{
 
     if (allItems.length === 0) {
         const item1 = new NewList({
-            name:"todo list",
+            name:"Todo list",
             listData:[
                 {
                     name:"...",
