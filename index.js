@@ -89,12 +89,9 @@ app.get("/:newList",async(req,res)=>{
 
     const listName = req.params.newList;
     const listInDb = await NewList.findOne({name:listName});
-
-    // console.log(listInDb.listData[0].savedDate);
-    // console.log(listInDb); 
-    // console.log(listInDb.listData[0].savedDate);
     const newFull = await NewList.find();
 
+    if (listInDb) {
         res.render("index.ejs",{
             listTitle:listInDb.name,
             array:listInDb.listData,
@@ -102,6 +99,19 @@ app.get("/:newList",async(req,res)=>{
             publishDate:listInDb.listData[0].savedDate,
             publishTime:listInDb.listData[0].savedTime
         });
+    }else{
+        res.render("index.ejs",{
+            listTitle:"",
+            array:[],
+            mainArray:[],
+            publishDate:"",
+            publishTime:""
+        });
+    }
+    // console.log(listInDb.listData[0].savedDate);
+    // console.log(listInDb); 
+    // console.log(listInDb.listData[0].savedDate);
+
 
 })
 

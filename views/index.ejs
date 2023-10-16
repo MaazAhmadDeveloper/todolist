@@ -97,80 +97,93 @@
 
                                     <!-- Main List  -->
 
-                                    <div class="main-box">
+                                    <% if (listTitle === "") { %>
+                                        
+                                        <h2 style="color: grey;"><i class="bi bi-emoji-frown"></i></h2>
+                                        <h1 class="incorrect-url-heading">Please write the correct URL</h1>
 
-                                        <div class="heading">
+                                    <% }else{ %>
+                                        
+                                        <div class="main-box">
 
-                                            <h1 class="main-list-heading">
-                                                <%= listTitle %>
-                                                <p class="main-list-date">
-                                                    <%= publishDate +" "+ publishTime%> </p>
-                                                    <form action="/deleteOneList" method="post" class="del-form del-for-min-width">
-                                                        <input type="hidden" name="listName"
-                                                            value="<%= listTitle %>">
-                                                        <button type="submit" class="del ">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
-
-        </h1>
-
-        </div>
-
-        <div class=" form-box">
-
-
-                                                            <% array.forEach((arrayElement, index)=>{ %>
-
-                                                                <% if (index !==0) { %>
-
-                                                                    <form class="parrent" action="/delete"
-                                                                        method="post">
-
-                                                                        <input type="checkbox" class="checkbox">
-                                                                        <p class="next-note">
-                                                                            <%= arrayElement.name %>
-                                                                        </p>
-                                                                        <input type="hidden" name="listTitle"
-                                                                            value="<%= listTitle %>">
-                                                                        <button class="delete" name="delete"
-                                                                            value="<%= arrayElement._id %>"
-                                                                            type="submit"><i
-                                                                                class="bi bi-trash"></i></button>
-
-                                                                    </form>
-                                                                    <%} %>
-                                                                        <% }) %>
-
-
+                                            <div class="heading">
+    
+                                                <h1 class="main-list-heading">
+                                                    <%= listTitle %>
+                                                    <p class="main-list-date">
+                                                        <%= publishDate +" "+ publishTime%> </p>
+                                                        <form action="/deleteOneList" method="post" class="del-form del-for-min-width">
+                                                            <input type="hidden" name="listName"
+                                                                value="<%= listTitle %>">
+                                                            <button type="submit" class="del ">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+    
+            </h1>
+    
+            </div>
+    
+            <div class=" form-box">
+    
+    
+                                                                <% array.forEach((arrayElement, index)=>{ %>
+    
+                                                                    <% if (index !==0) { %>
+    
+                                                                        <form class="parrent" action="/delete"
+                                                                            method="post">
+    
+                                                                            <input type="checkbox" class="checkbox">
+                                                                            <p class="next-note">
+                                                                                <%= arrayElement.name %>
+                                                                            </p>
+                                                                            <input type="hidden" name="listTitle"
+                                                                                value="<%= listTitle %>">
+                                                                            <button class="delete" name="delete"
+                                                                                value="<%= arrayElement._id %>"
+                                                                                type="submit"><i
+                                                                                    class="bi bi-trash"></i></button>
+    
+                                                                        </form>
+                                                                        <%} %>
+                                                                            <% }) %>
+    
+    
+                                            </div>
+                                            <!--add listitem form  -->
+                                            <form action="/" method="post"
+                                                class="add-form-add-icon add-form-small form-of-input"
+                                                onclick="addNewListItem()" id="add-create-input">
+    
+                                                <input type="text" name="new_note" placeholder="New item"
+                                                    class="new-item-placeholder">
+    
+                                                <input type="hidden" name="listTitle" value="<%= listTitle %>">
+                                                <button type="submit" class="add-button">
+                                                    <i class="fa-solid fa-plus"></i>
+                                                </button>
+    
+                                            </form>
                                         </div>
-                                        <!--add listitem form  -->
-                                        <form action="/" method="post"
-                                            class="add-form-add-icon add-form-small form-of-input"
-                                            onclick="addNewListItem()" id="add-create-input">
 
-                                            <input type="text" name="new_note" placeholder="New item"
-                                                class="new-item-placeholder">
-
-                                            <input type="hidden" name="listTitle" value="<%= listTitle %>">
-                                            <button type="submit" class="add-button">
-                                                <i class="fa-solid fa-plus"></i>
-                                            </button>
-
-                                        </form>
-                                    </div>
+                                    <% } %>
                         </main>
 
                         <!-- Footer -->
-                        <footer class="footer-parrent">
+                        <% if (listTitle !== "") { %>
+                            <footer class="footer-parrent">
 
-                            <%const year=new Date().getFullYear(); %>
+                                <%const year=new Date().getFullYear(); %>
+    
+                                    <p class="footer"> Copyright &#169; <%= year %>
+                                    </p>
+    
+                                    </div>
+                            </footer>
+                        <% } %>
 
-                                <p class="footer"> Copyright &#169; <%= year %>
-                                </p>
 
-                                </div>
-                        </footer>
                         </div>
 
                         <script>
@@ -185,7 +198,7 @@
                                     document.querySelector(".list-items-contsiner").style.opacity = 1;
                                     document.querySelector(".create-form").style.opacity = 1;
                                 } else {
-                                    document.getElementById("main-list").style.width = "50px";
+                                    document.getElementById("main-list").style.width = "0px";
                                     document.querySelector(".list-items-contsiner").style.opacity = 0;
                                     document.querySelector(".create-form").style.opacity = 0;
                                 }
