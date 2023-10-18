@@ -5,7 +5,7 @@ dotenv.config();
 const username = process.env.USERNAME_DB;
 const password = process.env.PASSWORD_DB;
 
-
+// db === paroname1125
 // const dbUrl = 'mongodb://0.0.0.0:27017/mytododb';  // URI for local mongodb
 
 
