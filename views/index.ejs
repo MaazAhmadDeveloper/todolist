@@ -55,7 +55,8 @@
                                                         value="<%= arrayObject.name%> "
                                                         onclick="window.location.href='/<%= encodeURIComponent(arrayObject.name) %>' ">
                                                     <i class="extraa">
-                                                        <form action="/deleteOneList" method="post" class="del-form del-for-max-width">
+                                                        <form action="/deleteOneList" method="post"
+                                                            class="del-form del-for-max-width">
                                                             <input type="hidden" name="listName"
                                                                 value="<%= arrayObject.name %>">
                                                             <button type="submit" class="del ">
@@ -69,12 +70,31 @@
 
                                                     <!-- delete all form -->
                                                     <% if(mainArray.length !==1){ %>
-                                                        <form action="/d/eleteAll" method="post">
-                                                            <button type="submit" class="deleteAll" name="deleteAll"
-                                                                value="delete"> <i class="i-delete-all">Delete All</i>
-                                                                <i class="i-all">All</i> <i
-                                                                    class="bi bi-trash"></i></button>
-                                                        </form>
+                                                            <button type="submit" class="deleteAll" onclick="deleteAllClick()">
+                                                                    <i class="i-delete-all">Delete All</i>
+                                                                    <i class="i-all">All</i> 
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+
+                                                                <dialog class="dialog">
+                                                                    <form action="/d/eleteAll" method="post">
+                                                                        <i class="bi bi-exclamation-triangle"></i>
+                                                                        <p class="caution-dialog">Are you sure to delete all these lists and all of their todos</p>
+
+                                                                        <div class="dialog-buttons">
+
+                                                                            <!-- cancel Btn -->
+                                                                            <button class="cancel-dialog">
+                                                                                 <i class="i-delete-all">Cancel</i>
+                                                                                </button>
+
+                                                                                <!-- confirm Btn -->
+                                                                            <button type="submit" class="confirm-dialog" name="deleteAll"
+                                                                            value="delete"> <i class="i-delete-all">Confirm</i>
+                                                                            </button>
+                                                                        </div>
+                                                                        </form>
+                                                                </dialog>
                                                         <% } %>
                                         </div>
 
@@ -97,124 +117,140 @@
 
                                     <!-- Main List  -->
 
-                                    <% if (listTitle === "") { %>
-                                        
+                                    <% if (listTitle==="" ) { %>
+
                                         <h2 style="color: grey;"><i class="bi bi-emoji-frown"></i></h2>
                                         <h1 class="incorrect-url-heading">Please write the correct URL</h1>
 
-                                    <% }else{ %>
-                                        
-                                        <div class="main-box">
+                                        <% }else{ %>
 
-                                            <div class="heading">
-    
-                                                <h1 class="main-list-heading">
-                                                    <%= listTitle %>
-                                                    <p class="main-list-date">
-                                                        <%= publishDate +" "+ publishTime%> </p>
-                                                        <form action="/deleteOneList" method="post" class="del-form del-for-min-width">
-                                                            <input type="hidden" name="listName"
-                                                                value="<%= listTitle %>">
-                                                            <button type="submit" class="del ">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </form>
-    
-            </h1>
-    
-            </div>
-    
-            <div class=" form-box">
-    
-    
-                                                                <% array.forEach((arrayElement, index)=>{ %>
-    
-                                                                    <% if (index !==0) { %>
-    
-                                                                        <form class="parrent" action="/delete"
-                                                                            method="post">
-    
-                                                                            <input type="checkbox" class="checkbox">
-                                                                            <p class="next-note">
-                                                                                <%= arrayElement.name %>
-                                                                            </p>
-                                                                            <input type="hidden" name="listTitle"
-                                                                                value="<%= listTitle %>">
-                                                                            <button class="delete" name="delete"
-                                                                                value="<%= arrayElement._id %>"
-                                                                                type="submit"><i
-                                                                                    class="bi bi-trash"></i></button>
-    
-                                                                        </form>
-                                                                        <%} %>
-                                                                            <% }) %>
-    
-    
+                                            <div class="main-box">
+
+                                                <div class="heading">
+
+                                                    <h1 class="main-list-heading">
+                                                        <%= listTitle %>
+                                                            <p class="main-list-date">
+                                                                <%= publishDate +" "+ publishTime%> </p>
+                                                        <form action=" /deleteOneList" method="post"
+                                                                    class="del-form del-for-min-width">
+                                                                    <input type="hidden" name="listName"
+                                                                        value="<%= listTitle %>">
+                                                                    <button type="submit" class="del ">
+                                                                        <i class="bi bi-trash"></i>
+                                                                    </button>
+                                                                    </form>
+
+                                                    </h1>
+
+                                                </div>
+
+                                                <div class=" form-box">
+
+
+                                                    <% array.forEach((arrayElement, index)=>{ %>
+
+                                                        <% if (index !==0) { %>
+
+                                                            <form class="parrent" action="/delete" method="post">
+
+                                                                <input type="checkbox" class="checkbox">
+                                                                <p class="next-note">
+                                                                    <%= arrayElement.name %>
+                                                                </p>
+                                                                <input type="hidden" name="listTitle"
+                                                                    value="<%= listTitle %>">
+                                                                <button class="delete" name="delete"
+                                                                    value="<%= arrayElement._id %>" type="submit"><i
+                                                                        class="bi bi-trash"></i></button>
+
+                                                            </form>
+                                                            <%} %>
+                                                                <% }) %>
+
+
+                                                </div>
+                                                <!--add listitem form  -->
+                                                <form action="/" method="post"
+                                                    class="add-form-add-icon add-form-small form-of-input"
+                                                    onclick="addNewListItem()" id="add-create-input">
+
+                                                    <input type="text" name="new_note" placeholder="New item"
+                                                        class="new-item-placeholder">
+
+                                                    <input type="hidden" name="listTitle" value="<%= listTitle %>">
+                                                    <button type="submit" class="add-button">
+                                                        <i class="fa-solid fa-plus"></i>
+                                                    </button>
+
+                                                </form>
                                             </div>
-                                            <!--add listitem form  -->
-                                            <form action="/" method="post"
-                                                class="add-form-add-icon add-form-small form-of-input"
-                                                onclick="addNewListItem()" id="add-create-input">
-    
-                                                <input type="text" name="new_note" placeholder="New item"
-                                                    class="new-item-placeholder">
-    
-                                                <input type="hidden" name="listTitle" value="<%= listTitle %>">
-                                                <button type="submit" class="add-button">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </button>
-    
-                                            </form>
-                                        </div>
 
-                                    <% } %>
+                                            <% } %>
                         </main>
 
                         <!-- Footer -->
-                        <% if (listTitle !== "") { %>
+                        <% if (listTitle !=="" ) { %>
                             <footer class="footer-parrent">
 
                                 <%const year=new Date().getFullYear(); %>
-    
+
                                     <p class="footer"> Copyright &#169; <%= year %>
                                     </p>
-    
+
                                     </div>
                             </footer>
-                        <% } %>
+                            <% } %>
 
 
-                        </div>
+                                </div>
 
-                        <script>
+                                <script>
 
-                            var menuFlag = true;
+                                    var menuFlag = true;
 
-                            const menuClick = () => {
-                                menuFlag = !menuFlag; // Toggle the menuFlag value
+                                    const menuClick = () => {
+                                        menuFlag = !menuFlag; // Toggle the menuFlag value
 
-                                if (menuFlag) {
-                                    document.getElementById("main-list").style.width = "230px";
-                                    document.querySelector(".list-items-contsiner").style.opacity = 1;
-                                    document.querySelector(".create-form").style.opacity = 1;
-                                } else {
-                                    document.getElementById("main-list").style.width = "0px";
-                                    document.querySelector(".list-items-contsiner").style.opacity = 0;
-                                    document.querySelector(".create-form").style.opacity = 0;
-                                }
-                            }
+                                        if (menuFlag) {
+                                            document.getElementById("main-list").style.width = "230px";
+                                            document.querySelector(".list-items-contsiner").style.opacity = 1;
+                                            document.querySelector(".create-form").style.opacity = 1;
+                                        } else {
+                                            document.getElementById("main-list").style.width = "0px";
+                                            document.querySelector(".list-items-contsiner").style.opacity = 0;
+                                            document.querySelector(".create-form").style.opacity = 0;
+                                        }
+                                    }
 
-                            const createList = () => {
-                                document.getElementById("top-create-input").classList.remove("create-form-add-icon");
-                                document.getElementById("top-create-input").classList.add("create-form-large");
-                            }
+                                    const createList = () => {
+                                        document.getElementById("top-create-input").classList.remove("create-form-add-icon");
+                                        document.getElementById("top-create-input").classList.add("create-form-large");
+                                    }
 
 
-                            const addNewListItem = () => {
-                                document.getElementById("add-create-input").classList.remove("add-form-add-icon");
-                                document.getElementById("add-create-input").classList.add("add-form-large");
-                            }
-                        </script>
+                                    const addNewListItem = () => {
+                                        document.getElementById("add-create-input").classList.remove("add-form-add-icon");
+                                        document.getElementById("add-create-input").classList.add("add-form-large");
+                                    }
+
+                                    // scripts of dialog
+
+                                    const dialogTag = document.querySelector(".dialog");
+
+                                    const deleteAllClick = ()=>{
+                                        document.querySelector(".dialog").classList.add("dialoge-display-block");
+                                        dialogTag.showModal();
+                                    }
+
+                                    document.querySelector(".cancel-dialog").addEventListener("click",()=>{
+                                        dialogTag.close();
+                                    })
+                                    document.querySelector(".confirm-dialog").addEventListener("click",()=>{
+                                        dialogTag.close();
+                                    })
+
+                                </script>
 
 </body>
 
