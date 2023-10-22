@@ -1,17 +1,24 @@
 import mongoose from "mongoose";
 
-const newListSchema = new mongoose.Schema({
-    name:String,
-    listData:[
-        {
-            name:String,
-            savedDate:String,
-            savedTime:String
-        }
-    ]
-});
+const mainFormateSchema = new mongoose.Schema(
+    {
+        _id: {
+            type: Number,
+            required: true
+        },
+        main: [{
+            name: String,
+            listData: [
+                {
+                    name: String,
+                    savedDate: String,
+                    savedTime: String
+                }
+            ]
+        }]
+    }
+);
 
-const NewList = mongoose.model("newLists",newListSchema);
+const MainFormate = mongoose.model("mainFormates",mainFormateSchema);
 
-
-export default NewList;
+export {MainFormate};

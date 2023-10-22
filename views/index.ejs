@@ -16,22 +16,13 @@
 
 <body>
 
+    <!-- For Time and Date -->
     <% const timeElapsed=Date.now(); %>
         <% const today=new Date(timeElapsed); %>
             <% const daysOfWeek=["Sun", "Mon" , "Tue" , "Wed" , "Thu" , "Fri" , "Sat" ]; %>
                 <% const dayName=daysOfWeek[new Date().getDay()]; %>
-                    <% const time=(today.getHours()> 9 ? today.getHours() : "0"+today.getHours()) + " : " +
+                    <% const time=(today.getHours()> 9 ? today.getHours() > 12 ? today.getHours()-12 :today.getHours() : "0"+today.getHours()) + " : " +
                         (today.getMinutes() > 9 ? today.getMinutes() : "0"+today.getMinutes()) ; %>
-
-
-                        <!-- Navigation-bar -->
-                        <!-- <header>
-        <div class="container mt-4 navbar">
-            <div class="row">
-                <div class="col top"><i class="fa-solid fa-calendar-days icon"></i> <a href="/" class="today-text">Home</a></div>
-            </div>
-        
-    </header> -->
 
 
                         <!-- Main -->
@@ -40,20 +31,30 @@
                             <!-- ARTICLE -->
 
 
+                            <!-- Full Menu list -->
+
                             <% if (locals.listTitle) { %>
 
 
                                 <article class="article float-lg-left">
 
+                                    <!-- menu icon -->
                                     <h2 class="menu-icon" onclick="menuClick()"><i class="bi bi-list"></i> </h2>
                                     <ul class="list" id="main-list">
+
                                         <div class="list-items-contsiner">
+
+                                            <!-- List all the listTitles -->
                                             <% mainArray.forEach((arrayObject)=>{ %>
 
                                                 <div class="list-item-line">
+
+                                                    <!-- button of listTitle Name -->
                                                     <input type="button" name="listTitle" class="list-item"
                                                         value="<%= arrayObject.name%> "
                                                         onclick="window.location.href='/<%= encodeURIComponent(arrayObject.name) %>' ">
+
+                                                        <!-- right side delete button -->
                                                     <i class="extraa">
                                                         <form action="/deleteOneList" method="post"
                                                             class="del-form del-for-max-width">
@@ -101,37 +102,46 @@
                                     </ul>
 
 
-                                    <!-- Create Form -->
+                                    <!-- ListTile Create Form -->
                                     <form action="/create" method="post" onclick="createList()" id="top-create-input"
                                         class="create-form-add-icon create-form-small create-form">
 
+                                        <!-- input field -->
                                         <input type="text" class="create-input" name="newList" placeholder="New List">
+
+                                        <!-- hidden input which take some values to backend -->
                                         <input type="hidden" name="date" value="<%= dayName %>">
                                         <input type="hidden" name="time" value="<%= time %>">
 
+                                        <!-- Add button -->
                                         <button type="submit" class="create-button">+</button>
                                     </form>
 
                                 </article>
                                 <% } %>
 
-                                    <!-- Main List  -->
+                                    <!-- Main TodoList  -->
 
+                                    <!-- Parrent if to check if URL is incorrect -->
                                     <% if (listTitle==="" ) { %>
 
                                         <h2 style="color: grey;"><i class="bi bi-emoji-frown"></i></h2>
                                         <h1 class="incorrect-url-heading">Please write the correct URL</h1>
 
+                                        <!-- parrent else when URL is correct -->
                                         <% }else{ %>
 
                                             <div class="main-box">
 
+                                                <!-- Header of TodoList -->
                                                 <div class="heading">
 
                                                     <h1 class="main-list-heading">
                                                         <%= listTitle %>
                                                             <p class="main-list-date">
                                                                 <%= publishDate +" "+ publishTime%> </p>
+
+                                                                <!-- delete button only for mobile screen -->
                                                         <form action=" /deleteOneList" method="post"
                                                                     class="del-form del-for-min-width">
                                                                     <input type="hidden" name="listName"
@@ -145,24 +155,30 @@
 
                                                 </div>
 
+                                                <!-- body todolist  -->
                                                 <div class=" form-box">
 
 
                                                     <% array.forEach((arrayElement, index)=>{ %>
 
+                                                        <!-- child if to list all index axept first -->
                                                         <% if (index !==0) { %>
 
                                                             <form class="parrent" action="/delete" method="post">
 
                                                                 <input type="checkbox" class="checkbox">
+
+                                                                <!-- todolist Text  -->
                                                                 <p class="next-note">
                                                                     <%= arrayElement.name %>
                                                                 </p>
                                                                 <input type="hidden" name="listTitle"
                                                                     value="<%= listTitle %>">
+
+                                                                    <!-- todolist text induvisual delete button  -->
                                                                 <button class="delete" name="delete"
                                                                     value="<%= arrayElement._id %>" type="submit"><i
-                                                                        class="bi bi-trash"></i></button>
+                                                                        class="bi bi-trash trash-icon-delete"></i></button>
 
                                                             </form>
                                                             <%} %>
@@ -170,15 +186,19 @@
 
 
                                                 </div>
-                                                <!--add listitem form  -->
+
+                                                <!--add listitem in todolist  -->
                                                 <form action="/" method="post"
                                                     class="add-form-add-icon add-form-small form-of-input"
                                                     onclick="addNewListItem()" id="add-create-input">
 
+                                                    <!-- input field -->
                                                     <input type="text" name="new_note" placeholder="New item"
                                                         class="new-item-placeholder">
 
                                                     <input type="hidden" name="listTitle" value="<%= listTitle %>">
+
+                                                    <!-- Add button -->
                                                     <button type="submit" class="add-button">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
