@@ -284,9 +284,11 @@ main {
 
 .caution-dialog{
     font-family:Georgia, 'Times New Roman', Times, serif;
-    color: #31cae8;
+    color: #e83131;
     padding-bottom: 10px;
     font-size: 25px;
+    font-size: 20px;
+    font-weight: 500;
 }
 
 .dialog-buttons{
@@ -310,6 +312,7 @@ main {
 .cancel-dialog:hover {
     background-color: #cbffff;
     color: rgb(49,202,232);
+    border: 1px solid red;
 
 }
 
@@ -502,7 +505,7 @@ main {
     font-family: 'Carter', cursive;
     bottom: 8px;
     left: 25px;
-    color: #31c4e0;
+    color: #28afca;
     max-width: 300px;
     max-height: min-content;
 }
