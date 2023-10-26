@@ -300,15 +300,13 @@ app.post("/d/eleteAll", async (req, res) => {
     // check to confirm from client side to delete All listTiltes
     if (searchQuery === "delete") {
 
-        // query to delete a all the listTiles of document instead of one "Todo list"
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) },{$pull: {main: {name: { $ne: "Todo list" }}}}); // Remove elements with a name other than "Todo list"
-        
-        // query to delete a all the items of "Todo list" object instead of one object which is first containg Date and time
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) },{$pull: {"main.0.listData": {name: { $ne: "..." }}}});
-          
-
+        // query to delete full document
+        await MainFormate.deleteOne({ _id: userDetail.sub });
+    
         res.redirect("/");
+          
     }
+
 })
 
 
