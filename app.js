@@ -90,17 +90,19 @@ app.get('/auth/google/failure', (req, res) => {
 });
 
 
+// Date and time setup
+const timeElapsed = Date.now();
+const today = new Date(timeElapsed);
+const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const dayName = daysOfWeek[new Date().getDay()];
+const time = (today.getHours() > 9 ? today.getHours() > 12 ? today.getHours()-12 :today.getHours() : "0" + today.getHours()) + " : " + (today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes());
+
+
 
 app.get("/", async (req, res) => {
 
     // getting value from userDetail state
     const userDetail = req.session.userDetail;
-
-    const timeElapsed = Date.now();
-    const today = new Date(timeElapsed);
-    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const dayName = daysOfWeek[new Date().getDay()];
-    const time = (today.getHours() > 9 ? today.getHours() > 12 ? today.getHours()-12 :today.getHours() : "0" + today.getHours()) + " : " + (today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes());
     
     // parrent if to check user login 
     if (userDetail !== null && userDetail !== undefined && typeof userDetail === 'object') {
@@ -284,7 +286,28 @@ app.post("/deleteOneList", async (req, res) => {
 
         // query to delete a all the items of "Todo list" object by its name
         await MainFormate.updateOne({ _id: Number(userDetail.sub) },{$pull: {"main.0.listData": {name: { $ne: "..." }}}});
-    }
+
+
+        await MainFormate.updateOne(
+            { _id: userDetail.sub, 'main.name': 'Todo list', 'main.listData.name': '...' },
+            {
+              $set: {
+                'main.$[outer].listData.$[inner].savedDate': dayName,
+                'main.$[outer].listData.$[inner].savedTime': time
+              }
+            },
+            {
+              arrayFilters: [{ 'outer.name': 'Todo list' }, { 'inner.name': '...' }]
+            },
+            (err, result) => {
+              if (err) {
+                console.error('Error updating document:', err);
+              } else {
+                console.log('Document updated successfully');
+              }
+            }
+          );
+        }
 
     res.redirect("/");
 
