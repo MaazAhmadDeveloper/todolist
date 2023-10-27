@@ -310,10 +310,8 @@ main {
     transition: 0.3s;
 }
 .cancel-dialog:hover {
-    background-color: #cbffff;
-    color: rgb(49,202,232);
-    border: 1px solid red;
-
+    background-color: rgb(190, 190, 190);
+    color: #272727;
 }
 
 .cancel-dialog:focus {
@@ -335,9 +333,7 @@ main {
     transition: 0.3s;
 }
 .confirm-dialog:hover {
-    background-color: rgb(230,34,34);
-    color: #cecece;
-
+    background-color: rgb(206, 15, 15);
 }
 .confirm-dialog:focus {
     outline: none;

@@ -90,20 +90,18 @@ app.get('/auth/google/failure', (req, res) => {
 });
 
 
-// Date and time setup
-const timeElapsed = Date.now();
-const today = new Date(timeElapsed);
-const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const dayName = daysOfWeek[new Date().getDay()];
-const time = (today.getHours() > 9 ? today.getHours() > 12 ? today.getHours()-12 :today.getHours() : "0" + today.getHours()) + " : " + (today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes());
-
-
-
 app.get("/", async (req, res) => {
+
+    // Date and time setup
+    const timeElapsed = Date.now();
+    const today = new Date(timeElapsed);
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayName = daysOfWeek[new Date().getDay()];
+    const time = (today.getHours() > 9 ? today.getHours() > 12 ? today.getHours() - 12 : today.getHours() : "0" + today.getHours()) + " : " + (today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes());
 
     // getting value from userDetail state
     const userDetail = req.session.userDetail;
-    
+
     // parrent if to check user login 
     if (userDetail !== null && userDetail !== undefined && typeof userDetail === 'object') {
 
@@ -136,7 +134,7 @@ app.get("/", async (req, res) => {
         } else {
 
             // if user have document then this will render to ejs
-            res.render("index.ejs", { 
+            res.render("index.ejs", {
                 listTitle: _.capitalize(userCompleteList.main[0].name),
                 array: userCompleteList.main[0].listData,
                 mainArray: userCompleteList.main,
@@ -167,32 +165,32 @@ app.post("/create", async (req, res) => {
     const createTime = req.body.time;
 
     // get full document from DB having a unique user id and a listTitle
-const userCompleteList = await MainFormate.find({
-    _id: Number(userDetail.sub),
-    "main.name": createItem
-});
+    const userCompleteList = await MainFormate.find({
+        _id: Number(userDetail.sub),
+        "main.name": createItem
+    });
 
-// simple js object
-const newListObject = {
+    // simple js object
+    const newListObject = {
 
-    name: createItem,
-    listData: [
-        {
-            name: "...",
-            savedDate: createDate,
-            savedTime: createTime
-        }
-    ]
-};
+        name: createItem,
+        listData: [
+            {
+                name: "...",
+                savedDate: createDate,
+                savedTime: createTime
+            }
+        ]
+    };
 
-// check if user have no listTitle in document 
-if (userCompleteList.length === 0) {
+    // check if user have no listTitle in document 
+    if (userCompleteList.length === 0) {
 
-    // push created simple object to document
-    await MainFormate.findOneAndUpdate({ _id: Number(userDetail.sub) }, { $push: { "main": newListObject } });
-    
-}
-res.redirect("/" + createItem);
+        // push created simple object to document
+        await MainFormate.findOneAndUpdate({ _id: Number(userDetail.sub) }, { $push: { "main": newListObject } });
+
+    }
+    res.redirect("/" + createItem);
 
 })
 
@@ -204,15 +202,15 @@ app.get("/:newList", async (req, res) => {
     const listName = req.params.newList;
 
     // to get document without array brackets "[]" (findOne)
-const userCompleteList = await MainFormate.findOne({ _id: Number(userDetail.sub),"main.name": listName});
+    const userCompleteList = await MainFormate.findOne({ _id: Number(userDetail.sub), "main.name": listName });
 
-// to get full array with brackets "[]" (find)
-const userCompleteFullArray = await MainFormate.find({ _id: Number(userDetail.sub),"main.name": listName});
+    // to get full array with brackets "[]" (find)
+    const userCompleteFullArray = await MainFormate.find({ _id: Number(userDetail.sub), "main.name": listName });
 
-// function to get seleted object by listTitle
-    const getDynamicObj = (arra)=>{
+    // function to get seleted object by listTitle
+    const getDynamicObj = (arra) => {
         return arra.find(item => item.name === listName)
-     }
+    }
 
     //  check if listTitle in URL is correct by finding that listTitle from DB if do not get Ans then
     if (userCompleteList.length !== 0) {
@@ -247,7 +245,7 @@ app.post("/", async (req, res) => {
     const newItem = req.body.new_note;
 
     // query to delete a particular or specific listTile object by its name
-    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName },{ $push: { "main.$.listData": { "name": newItem } } }); // Push the new object into the listData array
+    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName }, { $push: { "main.$.listData": { "name": newItem } } }); // Push the new object into the listData array
 
     res.redirect("/" + listName)
 
@@ -262,51 +260,40 @@ app.post("/delete", async (req, res) => {
     const listName = req.body.listTitle;
 
     // query to delete a particular or specific listTile object by its name
-    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName },{ $pull: { "main.$.listData": { _id: itemId } } }); // Pull the object by its _id
-      
+    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName }, { $pull: { "main.$.listData": { _id: itemId } } }); // Pull the object by its _id
+
     res.redirect("/" + listName);
 
 });
 
 app.post("/deleteOneList", async (req, res) => {
+    // Date and time setup
+    const timeElapsed = Date.now();
+    const today = new Date(timeElapsed);
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const dayName = daysOfWeek[new Date().getDay()];
+    const time = (today.getHours() > 9 ? today.getHours() > 12 ? today.getHours() - 12 : today.getHours() : "0" + today.getHours()) + " : " + (today.getMinutes() > 9 ? today.getMinutes() : "0" + today.getMinutes());
 
-     // get data from session state
+    // get data from session state
     const userDetail = req.session.userDetail;
 
     const listName = req.body.listName;
 
     // check if listTitle is NOT selected "Todo list" which comes to delete
     if (listName !== "Todo list") {
-        
-        // query to delete a particular or specific listTile object by its name
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) },{ $pull: { "main": { name: listName} } });
 
-    // check if listTitle which is selected is equal to "Todo list"
-    }else if (listName === "Todo list") {
+        // query to delete a particular or specific listTile object by its name
+        await MainFormate.updateOne({ _id: Number(userDetail.sub) }, { $pull: { "main": { name: listName } } });
+
+        // check if listTitle which is selected is equal to "Todo list"
+    } else if (listName === "Todo list") {
 
         // query to delete a all the items of "Todo list" object by its name
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) },{$pull: {"main.0.listData": {name: { $ne: "..." }}}});
-
-
-        await MainFormate.updateOne(
-            { _id: userDetail.sub, 'main.name': 'Todo list', 'main.listData.name': '...' },
-            {
-              $set: {
-                'main.$[outer].listData.$[inner].savedDate': dayName,
-                'main.$[outer].listData.$[inner].savedTime': time
-              }
-            },
-            {
-              arrayFilters: [{ 'outer.name': 'Todo list' }, { 'inner.name': '...' }]
-            },
-            (err, result) => {
-              if (err) {
-                console.error('Error updating document:', err);
-              } else {
-                console.log('Document updated successfully');
-              }
-            }
-          );
+        await MainFormate.updateOne({ _id: Number(userDetail.sub) }, { $pull: { "main.0.listData": { name: { $ne: "..." } } } });
+        
+        // query to set new updated Date and Time in Default todolist listTitle
+        await MainFormate.updateOne({ _id: userDetail.sub, 'main.name': 'Todo list', 'main.listData.name': '...' },{$set: {'main.$[outer].listData.$[inner].savedDate': dayName,'main.$[outer].listData.$[inner].savedTime': time}},{arrayFilters: [{ 'outer.name': 'Todo list' }, { 'inner.name': '...' }]});
+        
         }
 
     res.redirect("/");
@@ -325,9 +312,9 @@ app.post("/d/eleteAll", async (req, res) => {
 
         // query to delete full document
         await MainFormate.deleteOne({ _id: userDetail.sub });
-    
+
         res.redirect("/");
-          
+
     }
 
 })
