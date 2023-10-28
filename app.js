@@ -22,9 +22,9 @@ app.use(express.static("public"));
 var userInfoVariable;
 
 // getting environment variables
-const clientID = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
-const callbackURL = process.env.CALLBACK_URL;
+const clientID = "394050867310-h5t92hjv02u8jctkqv1c8hsisjviblfm.apps.googleusercontent.com";
+const clientSecret = "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";
+const callbackURL = "/auth/google/callback";
 
 //  Passport.js for Google sign in
 passport.use(new GoogleStrategy.Strategy({
