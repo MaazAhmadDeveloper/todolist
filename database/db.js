@@ -7,10 +7,10 @@ const password = process.env.PASSWORD_DB;
 
 // paroname1125
 
-// const dbUrl = 'mongodb://0.0.0.0:27017/mylocaltodo';  // URI for local mongodb
+const dbUrl = 'mongodb://0.0.0.0:27017/lakalaka';  // URI for local mongodb
 
 
-const dbUrl = "mongodb+srv://"+username+":"+password+"@todolist.zms8d3u.mongodb.net/?retryWrites=true&w=majority"; // URI for live server mongodb
+// const dbUrl = "mongodb+srv://"+username+":"+password+"@todolist.zms8d3u.mongodb.net/?retryWrites=true&w=majority"; // URI for live server mongodb
 
 const mongodbConnection = async ()=>{
     try {

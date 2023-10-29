@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/formStyle/formStyle.css">
+    <title>Todo List</title>
+</head>
+<body>
+
+    <div class="main">
+        <h1 class="heading-login">Login in</h1>
+        <p style="color: #999999;">Now enter your Username and password</p>
+    <div class="fullForm">
+        <form class="login-form" action="/user/login" method="post">
+            <% if (locals.userName) {%>
+                <p class="wrong-Username-text"><%= userName %></p>
+            <% } %>
+            <input type="text" name="userName" placeholder="User Name" required>
+
+            <% if (locals.password) {%>
+                <p class="wrong-Password-text"><%= password %></p>
+            <% } %>
+            <input type="password" name="userPassword" placeholder="Password" requiredf>
+            <button class="login-btn" type="submit">Login</button>
+        </form>
+    
+        <form action="/signIn/form" method="post">
+            <button class="extra-btn-signIn" type="submit">Or sign Up</button>
+        </form>
+    </div>
+    </div>
+
+</body>
+</html>

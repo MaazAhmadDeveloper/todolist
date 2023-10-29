@@ -2,42 +2,27 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import bodyParser from "body-parser";
-import { checkAuthentication } from "./views/google_oauth.js";
+import bcrypt  from "bcrypt";
 import _ from "lodash";
-import passport from 'passport';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import GoogleStrategy from 'passport-google-oauth2';
 import mongodbConnection from "./database/db.js";
 import { MainFormate } from "./database/models/newList.js";
+import { User } from "./database/models/userData.js";
+
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }))
+app.set('view engine', 'ejs');
 app.use(express.static("public"));
-
-// global varibale for user
-var userInfoVariable;
-
-// getting environment variables
-const clientID = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
-const callbackURL = process.env.CALLBACK_URL;
-
-//  Passport.js for Google sign in
-passport.use(new GoogleStrategy.Strategy({
-    clientID,
-    clientSecret,
-    callbackURL,
-    passReqToCallback: true,
-}, (request, accessToken, refreshToken, profile, done) => {
-
-    userInfoVariable = profile;
-    return done(null, profile);
-
-}));
 
 // session setup
 app.use(session({
@@ -46,48 +31,77 @@ app.use(session({
     saveUninitialized: true,
 }));
 app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
-
-// passport setup
-passport.serializeUser((user, done) => {
-    done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-    done(null, user);
-});
 
 // Mongo DB connection!
 mongodbConnection();
 
 
-// SIGN IN ROUTES OF GOOGLE
+// SIGN IN ROUTES OF form
 
-app.get('/auth/google', passport.authenticate('google', {
-    scope: ['email', 'profile'],
-}));
+app.post("/user/signIn", async (req, res) => {
+    const userName = _.capitalize(req.body.userName);
+    const userPassword = req.body.userPassword;
 
-app.get("/sign/in", checkAuthentication, (req, res) => {
-    res.redirect("/auth/google/success");
-})
+    // bcrypt setup
+    const saltRound = 10;
 
-app.get('/auth/google/callback', passport.authenticate('google', {
-    successRedirect: '/auth/google/success',
-    failureRedirect: '/auth/google/failure',
-}));
+    bcrypt.hash(userPassword , saltRound, async (err , hash)=>{
 
-app.get('/auth/google/success', (req, res) => {
-
-    // create a session state named userDetail containg all info of userInfoVariable
-    req.session.userDetail = userInfoVariable;
+        const userInfoObject = {
+            user: userName,
+            password: hash
+        };
+    
+        const userData = new User(userInfoObject);
+        await userData.save();
+        
+        req.session.userDetail = userInfoObject;
+    });
 
     res.redirect("/");
-});
 
-app.get('/auth/google/failure', (req, res) => {
-    res.send("Welcome to failure page");
-});
+})
+
+app.post("/user/login", async (req, res) => {
+
+    const userName = _.capitalize(req.body.userName);
+    const userPassword = req.body.userPassword;
+
+    const userDetail = await User.findOne({ user: userName });
+
+    if (userDetail && !undefined) {
+
+        bcrypt.compare(userPassword , userDetail.password, (err,result)=>{
+
+            if (result === true) {
+    
+                req.session.userDetail = userDetail;
+                res.redirect("/");
+    
+            } else if(result === false) {
+    
+                res.render("login", {
+                    password:"incorrect password, please write correct password"
+                });
+    
+            }
+        })
+
+    }else {
+
+        res.render("login", {
+            userName:"User not exist"
+        });
+    }
+
+})
+
+app.post("/signIn/form", (req, res) => {
+    res.render("signUp");
+})
+app.post("/login/form", (req, res) => {
+    res.render("login");
+})
 
 
 app.get("/", async (req, res) => {
@@ -106,14 +120,14 @@ app.get("/", async (req, res) => {
     if (userDetail !== null && userDetail !== undefined && typeof userDetail === 'object') {
 
         // get full document from DB by id
-        const userCompleteList = await MainFormate.findOne({ _id: Number(userDetail.sub) });
+        const userCompleteList = await MainFormate.findOne({ _id: userDetail.user });
 
         // child if > checking if user have no any inbuild document then it will create
         if (!userCompleteList) {
 
             const item1 = new MainFormate({
 
-                _id: Number(userDetail.sub),
+                _id: userDetail.user,
                 main: [{
                     name: "Todo list",
                     listData: [
@@ -129,13 +143,13 @@ app.get("/", async (req, res) => {
 
             await item1.save();
             res.redirect("/");
-            
+
 
             // child else >
         } else {
 
             // if user have document then this will render to ejs
-            res.render("index.ejs", {
+            res.render("index", {
                 listTitle: _.capitalize(userCompleteList.main[0].name),
                 array: userCompleteList.main[0].listData,
                 mainArray: userCompleteList.main,
@@ -146,7 +160,7 @@ app.get("/", async (req, res) => {
 
         // parrent else when user is not loggen in then to redirect to sign in page  
     } else {
-        res.redirect("/sign/in");
+        res.render("login");
     }
 
 })
@@ -167,7 +181,7 @@ app.post("/create", async (req, res) => {
 
     // get full document from DB having a unique user id and a listTitle
     const userCompleteList = await MainFormate.find({
-        _id: Number(userDetail.sub),
+        _id: userDetail.user,
         "main.name": createItem
     });
 
@@ -188,7 +202,7 @@ app.post("/create", async (req, res) => {
     if (userCompleteList.length === 0) {
 
         // push created simple object to document
-        await MainFormate.findOneAndUpdate({ _id: Number(userDetail.sub) }, { $push: { "main": newListObject } });
+        await MainFormate.findOneAndUpdate({ _id: userDetail.user }, { $push: { "main": newListObject } });
 
     }
     res.redirect("/" + createItem);
@@ -203,10 +217,10 @@ app.get("/:newList", async (req, res) => {
     const listName = req.params.newList;
 
     // to get document without array brackets "[]" (findOne)
-    const userCompleteList = await MainFormate.findOne({ _id: Number(userDetail.sub), "main.name": listName });
+    const userCompleteList = await MainFormate.findOne({ _id: userDetail.user, "main.name": listName });
 
     // to get full array with brackets "[]" (find)
-    const userCompleteFullArray = await MainFormate.find({ _id: Number(userDetail.sub), "main.name": listName });
+    const userCompleteFullArray = await MainFormate.find({ _id: userDetail.user, "main.name": listName });
 
     // function to get seleted object by listTitle
     const getDynamicObj = (arra) => {
@@ -246,7 +260,7 @@ app.post("/", async (req, res) => {
     const newItem = req.body.new_note;
 
     // query to delete a particular or specific listTile object by its name
-    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName }, { $push: { "main.$.listData": { "name": newItem } } }); // Push the new object into the listData array
+    await MainFormate.updateOne({ _id: userDetail.user, "main.name": listName }, { $push: { "main.$.listData": { "name": newItem } } }); // Push the new object into the listData array
 
     res.redirect("/" + listName)
 
@@ -261,7 +275,7 @@ app.post("/delete", async (req, res) => {
     const listName = req.body.listTitle;
 
     // query to delete a particular or specific listTile object by its name
-    await MainFormate.updateOne({ _id: Number(userDetail.sub), "main.name": listName }, { $pull: { "main.$.listData": { _id: itemId } } }); // Pull the object by its _id
+    await MainFormate.updateOne({ _id: userDetail.user, "main.name": listName }, { $pull: { "main.$.listData": { _id: itemId } } }); // Pull the object by its _id
 
     res.redirect("/" + listName);
 
@@ -284,18 +298,18 @@ app.post("/deleteOneList", async (req, res) => {
     if (listName !== "Todo list") {
 
         // query to delete a particular or specific listTile object by its name
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) }, { $pull: { "main": { name: listName } } });
+        await MainFormate.updateOne({ _id: userDetail.user }, { $pull: { "main": { name: listName } } });
 
         // check if listTitle which is selected is equal to "Todo list"
     } else if (listName === "Todo list") {
 
         // query to delete a all the items of "Todo list" object by its name
-        await MainFormate.updateOne({ _id: Number(userDetail.sub) }, { $pull: { "main.0.listData": { name: { $ne: "..." } } } });
-        
+        await MainFormate.updateOne({ _id: userDetail.user }, { $pull: { "main.0.listData": { name: { $ne: "..." } } } });
+
         // query to set new updated Date and Time in Default todolist listTitle
-        await MainFormate.updateOne({ _id: userDetail.sub, 'main.name': 'Todo list', 'main.listData.name': '...' },{$set: {'main.$[outer].listData.$[inner].savedDate': dayName,'main.$[outer].listData.$[inner].savedTime': time}},{arrayFilters: [{ 'outer.name': 'Todo list' }, { 'inner.name': '...' }]});
-        
-        }
+        await MainFormate.updateOne({ _id: userDetail.user, 'main.name': 'Todo list', 'main.listData.name': '...' }, { $set: { 'main.$[outer].listData.$[inner].savedDate': dayName, 'main.$[outer].listData.$[inner].savedTime': time } }, { arrayFilters: [{ 'outer.name': 'Todo list' }, { 'inner.name': '...' }] });
+
+    }
 
     res.redirect("/");
 
@@ -312,13 +326,19 @@ app.post("/d/eleteAll", async (req, res) => {
     if (searchQuery === "delete") {
 
         // query to delete full document
-        await MainFormate.deleteOne({ _id: userDetail.sub });
+        await MainFormate.deleteOne({ _id: userDetail.user });
 
         res.redirect("/");
 
     }
 
 })
+
+app.get('/user/logout', (req, res) => {
+
+    res.clearCookie('connect.sid');
+    res.render("login");
+});
 
 
 app.listen(port, () => {

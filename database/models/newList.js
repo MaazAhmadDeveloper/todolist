@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const mainFormateSchema = new mongoose.Schema(
     {
         _id: {
-            type: Number,
+            type: String,
             required: true
         },
         main: [{

@@ -24,6 +24,29 @@ body {
     color: #a86d00;
 }
 
+.logout-form{
+    display: flex;
+}
+.logout-form-for-mobile{
+    display: none;
+}
+
+.logout-btn{
+    background-color: transparent;
+    border: none;
+    margin: auto;
+    padding: 10px;
+    font-size: 18px;
+    color: #ff5e00;
+}
+.logout-btn:focus{
+    outline: none;
+}
+.logout-btn:hover{
+    transition: 0.3s;
+    color: #000;
+}
+
 main {
     position: relative;
     top: 5rem;
@@ -197,7 +220,7 @@ main {
 }
 
 .list-items-contsiner {
-    padding: 1.2rem 1.2rem 1.8rem 1.2rem;
+    padding: 0rem 1.2rem 1.8rem 1.2rem;
 }
 
 .list-item {
@@ -682,6 +705,18 @@ main {
         display: none;
     }
 
+    .logout-form{
+        display: none;
+    }
+    .logout-form-for-mobile{
+        display: block;
+    }
+    .logout-btn{
+        margin-right: auto;
+        font-size: 15px;
+        padding: 5px;
+    }
+
     .list {
         width: auto;
         height: 60px;
@@ -745,7 +780,11 @@ main {
     }
     
     .deleteAll{
-        width:100px ;
+        position: static;
+        width:200px ;
+        position: relative;
+        display: flex;
+        bottom: 7px;
     }
 
     .dialog{
@@ -774,6 +813,11 @@ main {
 
     .i-all{
         display: inline-block;
+        font-size: 15px;
+    }
+
+    .bi-trash{
+        font-size: 18px;
     }
 
     .del-for-min-width{

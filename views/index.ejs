@@ -38,11 +38,21 @@
 
                                 <article class="article float-lg-left">
 
+                                    
                                     <!-- menu icon -->
                                     <h2 class="menu-icon" onclick="menuClick()"><i class="bi bi-list"></i> </h2>
+                                    
                                     <ul class="list" id="main-list">
 
+                                        <form class="logout-form" action="/user/logout" method="get">
+                                            <button class="logout-btn" type="submit">Logout &nbsp &nbsp &nbsp &nbsp<i class="bi bi-box-arrow-left"></i></button>
+                                        </form>
+
                                         <div class="list-items-contsiner">
+
+                                            <form class="logout-form-for-mobile" action="/user/logout" method="get">
+                                                <button class="logout-btn" type="submit">Logout &nbsp<i class="bi bi-box-arrow-left"></i></button>
+                                            </form>
 
                                             <!-- List all the listTitles -->
                                             <% mainArray.forEach((arrayObject)=>{ %>
@@ -73,7 +83,7 @@
                                                     <% if(mainArray.length !==1){ %>
                                                             <button type="submit" class="deleteAll" onclick="deleteAllClick()">
                                                                     <i class="i-delete-all">Delete All</i>
-                                                                    <i class="i-all">All</i> 
+                                                                    <i class="i-all">All </i> 
                                                                     <i class="bi bi-trash"></i>
                                                                 </button>
 

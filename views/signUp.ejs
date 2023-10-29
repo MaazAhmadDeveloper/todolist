@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/formStyle/formStyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Carter+One&family=Caveat&display=swap">
+    <title>Todo List</title>
+</head>
+
+<body>
+
+    <div class="main">
+        <h1 class="heading-sign-up">Sign up</h1>
+        <div class="fullForm">
+            <form class="signUp-form" action="/user/signIn" method="post">
+                <input type="text" name="userName" placeholder="New User Name" required>
+                <input type="password" name="userPassword" placeholder="Password" required>
+                <button class="create-account-btn" type="submit">Create Account</button>
+            </form>
+
+            <form action="/login/form" method="post">
+                <button class="extra-btn-login" type="submit">Or login In</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

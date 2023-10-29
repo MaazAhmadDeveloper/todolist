@@ -1,0 +1,170 @@
+html{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+body {
+    /* background: linear-gradient(to bottom right, #00a896, #c4f1f9); */
+    background: radial-gradient(circle, #94d8e4, #eefff5);
+    /* background: linear-gradient(to bottom, #f7f7f7, #c4f1f9); */
+    /* background: linear-gradient(to bottom, #3399ff, #c4f1f9); */
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* SIGN UP PAGE STYLING */
+
+
+.main{
+    background-color: #fff;
+    margin: auto;
+    width: 450px;
+    border: 1px solid rgb(218, 218, 218);
+    border-radius: 10px;
+    margin-top: 50px;
+}
+
+.heading-sign-up{
+    font-family: 'Carter', cursive;
+    font-size: 22px;
+    color: #69afca;   
+}
+
+.wrong-Username-text{
+    color: red;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 18%;
+    position: relative;
+    top: 10px;
+}
+
+.signUp-form input{
+    display: block;
+    margin: auto;
+    border: none;
+    max-width: 280px;
+    width: 100%;
+    padding: 10px;
+    height: 20px;
+    margin-top: 20px;
+    border-bottom: 2px solid rgb(192, 192, 192);
+    font-family: 'Carter', cursive;
+    font-size: 18px;
+    color: #69afca;
+}
+.signUp-form input:focus{
+    outline: none;
+    transition: 0.3s;
+    border-bottom: 1px solid skyblue;
+}
+.signUp-form input::placeholder{
+    font-family: 'Carter', cursive;
+    font-size: 18px;
+    color: #b3b3b3;
+}
+
+.create-account-btn{
+    background: linear-gradient(to bottom right, #55dfd1, #c4f1f9);;
+    border: none;
+    max-width: 280px;
+    width: 100%;
+    color: #fff;
+    height: 35px;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 60px;
+}
+.create-account-btn:focus{
+    outline: none;
+}
+
+.extra-btn-login{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: rgb(4, 0, 255);
+    font-size: 16px;
+    padding: 20px;
+}
+.extra-btn-login:focus{
+    outline: none;
+}
+
+
+/* Login PAGE STYLING */
+
+.heading-login{
+    font-family: 'Carter', cursive;
+    font-size: 22px;
+    color: #69afca;   
+}
+
+.wrong-Password-text{
+    color: red;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 18%;
+    position: relative;
+    top: 10px;
+}
+
+.login-form input{
+    display: block;
+    margin: auto;
+    border: none;
+    max-width: 280px;
+    width: 100%;
+    padding: 10px;
+    height: 20px;
+    margin-top: 20px;
+    border-bottom: 2px solid rgb(192, 192, 192);
+    font-family: 'Carter', cursive;
+    font-size: 18px;
+    color: #69afca;
+}
+.login-form input:focus{
+    outline: none;
+    transition: 0.3s;
+    border-bottom: 1px solid skyblue;
+}
+.login-form input::placeholder{
+    font-family: 'Carter', cursive;
+    font-size: 18px;
+    color: #b3b3b3;
+}
+
+.login-btn{
+    background: linear-gradient(to bottom right, #55dfd1, #c4f1f9);;
+    border: none;
+    max-width: 280px;
+    width: 100%;
+    color: #fff;
+    height: 35px;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 18px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-top: 60px;
+}
+.login-btn:focus{
+    outline: none;
+}
+
+.extra-btn-signIn{
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: rgb(4, 0, 255);
+    font-size: 16px;
+    padding: 20px;
+}
+.extra-btn-signIn:focus{
+    outline: none;
+}
