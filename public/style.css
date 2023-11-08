@@ -840,3 +840,128 @@ main {
         margin-top: 0px;
     }
 }
+
+/* on SCREEN 390PX */
+
+@media screen and (max-width:390px) {
+    form.parrent{
+        width: 360px;
+    }
+    .del{
+        position: relative;
+        left: -150px;
+        bottom: 70px;
+        font-size: 28px;
+    }
+    .main-box{
+        width: 390px;
+    }
+
+    .dialog{
+        height: 28vh;
+        width: 90%;
+    }
+    .form-of-input input[type=text] {
+        width: 270px;
+    }
+    .add-form-large {
+        width: 350px;
+    }
+    .incorrect-url-heading{
+        font-size: 2rem;
+    }
+}
+
+
+/* on SCREEN 414PX */
+
+@media screen and (max-width: 414px) {
+    form.parrent{
+        width: 384px;
+    }
+    .del{
+        position: relative;
+        left: -150px;
+        bottom: 70px;
+        font-size: 28px;
+    }
+    .main-box{
+        width: 414px;
+    }
+
+    .dialog{
+        height: 28vh;
+        width: 90%;
+    }
+    .form-of-input input[type=text] {
+        width: 270px;
+    }
+    .add-form-large {
+        width: 364px;
+    }
+    .incorrect-url-heading{
+        font-size: 2rem;
+    }
+}
+
+/* on SCREEN 360PX */
+
+@media screen and (max-width: 360PX) {
+    form.parrent{
+        width: 330px;
+    }
+    .del{
+        position: relative;
+        left: -150px;
+        bottom: 70px;
+        font-size: 28px;
+    }
+    .main-box{
+        width: 360PX;
+    }
+
+    .dialog{
+        height: 28vh;
+        width: 90%;
+    }
+    .form-of-input input[type=text] {
+        width: 270px;
+    }
+    .add-form-large {
+        width: 314px;
+    }
+    .incorrect-url-heading{
+        font-size: 2rem;
+    }
+}
+
+/* on SCREEN 430PX */
+
+@media screen and (max-width: 430PX) {
+    form.parrent{
+        width: 400px;
+    }
+    .del{
+        position: relative;
+        left: -150px;
+        bottom: 70px;
+        font-size: 28px;
+    }
+    .main-box{
+        width: 430PX;
+    }
+
+    .dialog{
+        height: 28vh;
+        width: 90%;
+    }
+    .form-of-input input[type=text] {
+        width: 270px;
+    }
+    .add-form-large {
+        width: 384px;
+    }
+    .incorrect-url-heading{
+        font-size: 2rem;
+    }
+}

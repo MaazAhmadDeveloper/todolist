@@ -168,3 +168,10 @@ body {
 .extra-btn-signIn:focus{
     outline: none;
 }
+
+
+@media screen and (max-width:390px) {
+    .main{
+        width: 350px;
+    }
+}

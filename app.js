@@ -42,7 +42,10 @@ app.post("/user/signIn", async (req, res) => {
     const userName = _.capitalize(req.body.userName);
     const userPassword = req.body.userPassword;
 
-    // bcrypt setup
+    const accountExist = await User.findOne({user : userName});
+
+    if (!accountExist) {
+            // bcrypt setup
     const saltRound = 10;
 
     bcrypt.hash(userPassword , saltRound, async (err , hash)=>{
@@ -54,11 +57,16 @@ app.post("/user/signIn", async (req, res) => {
     
         const userData = new User(userInfoObject);
         await userData.save();
-        
+
         req.session.userDetail = userInfoObject;
     });
 
-    res.redirect("/");
+    res.render("login");
+    }else{
+        res.render("signUp",{
+            account: "User already exist!"
+        })
+    }
 
 })
 
@@ -160,7 +168,7 @@ app.get("/", async (req, res) => {
 
         // parrent else when user is not loggen in then to redirect to sign in page  
     } else {
-        res.render("login");
+        res.render("signUp");
     }
 
 })
@@ -228,7 +236,7 @@ app.get("/:newList", async (req, res) => {
     }
 
     //  check if listTitle in URL is correct by finding that listTitle from DB if do not get Ans then
-    if (userCompleteList.length !== 0) {
+    if (userCompleteList !== null && userCompleteList.length !== 0) {
 
         res.render("index.ejs", {
             listTitle: getDynamicObj(userCompleteList.main).name,
@@ -337,7 +345,7 @@ app.post("/d/eleteAll", async (req, res) => {
 app.get('/user/logout', (req, res) => {
 
     res.clearCookie('connect.sid');
-    res.render("login");
+    res.render("signUp");
 });
 
 

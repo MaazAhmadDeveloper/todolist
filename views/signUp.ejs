@@ -15,6 +15,10 @@
     <div class="main">
         <h1 class="heading-sign-up">Sign up</h1>
         <div class="fullForm">
+
+                <% if (locals.account) { %>
+                    <p class="wrong-Username-text" ><%= account %></p>
+               <% } %>
             <form class="signUp-form" action="/user/signIn" method="post">
                 <input type="text" name="userName" placeholder="New User Name" required>
                 <input type="password" name="userPassword" placeholder="Password" required>
