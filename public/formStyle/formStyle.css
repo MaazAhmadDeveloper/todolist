@@ -175,3 +175,15 @@ body {
         width: 350px;
     }
 }
+
+@media screen and (max-width:412px) {
+    .main{
+        width: 350px;
+    }
+}
+
+@media screen and (max-width:430px) {
+    .main{
+        width: 350px;
+    }
+}
